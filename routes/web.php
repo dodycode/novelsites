@@ -60,6 +60,9 @@ Route::prefix('/')->group(function() {
 	// Likes FT
 	Route::get('/fantranslation/{slug}/like', 'UserController@addLike')->name('index.ft.like.add');
 	Route::get('/fantranslation/{slug}/removelike', 'UserController@removeLike')->name('index.ft.like.remove');
+
+	// Sitemap
+	Route::get('/sitemap', 'SitemapController@index')->name('index.sitemap');
 });
 
  // Authentication Routes...
