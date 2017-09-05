@@ -189,9 +189,18 @@
             height: 300px !important;
         }
 
+        .description span{
+            text-align: justify !important;
+            background-color: inherit !important;
+        }
+
         @media only screen and (max-width: 800px) {
             h2{
                 font-size: 35px;
+            }
+
+            .description span{
+                font-size: 16px !important;
             }
 
             .description p span{

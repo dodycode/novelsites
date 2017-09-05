@@ -11,6 +11,9 @@ use App\User;
 use App\Favorites;
 use App\FT;
 use App\Likes;
+use App\TipeNovel;
+use App\Genres;
+use App\Tags;
 use Auth;
 use Feeds;
 
@@ -161,5 +164,157 @@ class FrontEndController extends Controller
         ->with('ft', $ft)
         ->with('chapters', $chapters)
         ->with('cekLike', $cekLike);
+    }
+
+    public function filterNovel($filtertipe, $slug, $orderby = 'tanggal', $order = 'desc')
+    {
+        //nilai default
+        $totalvote = 0;
+        $jumlahBad = 0;
+        $jumlahNeutral = 0;
+        $jumlahAmazing = 0;
+        $persentaseBad = 0;
+        $persentaseNeutral = 0;
+        $persentaseAmazing = 0;
+
+        if($filtertipe == 'tipenovel'){
+            $tipenovel = TipeNovel::select('id', 'nama_tipe', 'slug')->where('slug', $slug)->first();
+            if (count($tipenovel) > 0) {
+                $slugPage = $tipenovel->slug;
+                $judulPage = $tipenovel->nama_tipe;
+
+                if ($orderby == 'favorites') {
+                    $novels = Novels::withCount('favorites')->where('id_tipe_novel', $tipenovel->id)->where('deleted', 0)->orderBy('favorites_count', $order)->paginate(20);
+                }elseif ($orderby == 'judul') {
+                    $novels = Novels::where('deleted', 0)->where('id_tipe_novel', $tipenovel->id)->orderBy('judul_novel', $order)->paginate(20);
+                }elseif($orderby == 'tanggal'){
+                    $novels = Novels::where('deleted', 0)->where('id_tipe_novel', $tipenovel->id)->orderBy('created_at', $order)->paginate(20);
+                }
+
+                return view('filtered-novel')
+                ->with('totalvote', $totalvote)
+                ->with('jumlahbad', $jumlahBad)
+                ->with('jumlahneutral', $jumlahNeutral)
+                ->with('jumlahamazing', $jumlahAmazing)
+                ->with('persentasebad', $persentaseBad)
+                ->with('persentaseneutral', $persentaseNeutral)
+                ->with('persentaseamazing', $persentaseAmazing)
+                ->with('collections', $novels)
+                ->with('judulPage', $judulPage)
+                ->with('orderby', $orderby)
+                ->with('order', $order)
+                ->with('slugPage', $slugPage)
+                ->with('filtertipe', $filtertipe);
+            }else{
+                abort(404);
+            }
+        }elseif($filtertipe == "genres"){
+            $genre = Genres::select('id', 'nama_genre', 'slug')->where('slug', $slug)->first();
+            if (count($genre) > 0) {
+                $slugPage = $genre->slug;
+                $judulPage = $genre->nama_genre;
+
+                 if ($orderby == 'favorites') {
+                    $novels = Novels::withCount('favorites')->whereHas('genres', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->orderBy('favorites_count', $order)->paginate(20);
+                }elseif ($orderby == 'judul') {
+                    $novels = Novels::whereHas('genres', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->orderBy('judul_novel', $order)->paginate(20);
+                }elseif($orderby == 'tanggal'){
+                    $novels = Novels::whereHas('genres', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->orderBy('created_at', $order)->paginate(20);
+                }
+
+                return view('filtered-novel')
+                ->with('totalvote', $totalvote)
+                ->with('jumlahbad', $jumlahBad)
+                ->with('jumlahneutral', $jumlahNeutral)
+                ->with('jumlahamazing', $jumlahAmazing)
+                ->with('persentasebad', $persentaseBad)
+                ->with('persentaseneutral', $persentaseNeutral)
+                ->with('persentaseamazing', $persentaseAmazing)
+                ->with('collections', $novels)
+                ->with('judulPage', $judulPage)
+                ->with('orderby', $orderby)
+                ->with('order', $order)
+                ->with('slugPage', $slugPage)
+                ->with('filtertipe', $filtertipe);
+            }else{
+                abort(404);
+            }
+        }elseif($filtertipe == "tags"){
+            $tags = Tags::select('id', 'nama_tag', 'slug')->where('slug', $slug)->first();
+            if (count($tags) > 0) {
+                $slugPage = $tags->slug;
+                $judulPage = $tags->nama_tag;
+
+                 if ($orderby == 'favorites') {
+                    $novels = Novels::withCount('favorites')->whereHas('tags', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->orderBy('favorites_count', $order)->paginate(20);
+                }elseif ($orderby == 'judul') {
+                    $novels = Novels::whereHas('tags', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->orderBy('judul_novel', $order)->paginate(20);
+                }elseif($orderby == 'tanggal'){
+                    $novels = Novels::whereHas('tags', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->orderBy('created_at', $order)->paginate(20);
+                }
+
+                return view('filtered-novel')
+                ->with('totalvote', $totalvote)
+                ->with('jumlahbad', $jumlahBad)
+                ->with('jumlahneutral', $jumlahNeutral)
+                ->with('jumlahamazing', $jumlahAmazing)
+                ->with('persentasebad', $persentaseBad)
+                ->with('persentaseneutral', $persentaseNeutral)
+                ->with('persentaseamazing', $persentaseAmazing)
+                ->with('collections', $novels)
+                ->with('judulPage', $judulPage)
+                ->with('orderby', $orderby)
+                ->with('order', $order)
+                ->with('slugPage', $slugPage)
+                ->with('filtertipe', $filtertipe);
+            }else{
+                abort(404);
+            }
+        }elseif($filtertipe == "author"){
+            $author = Novels::select('id', 'author_novel')->where('author_novel', $slug)->first();
+            if (count($author) > 0) {
+                $slugPage = $author->author_novel;
+                $judulPage = $author->author_novel;
+
+                if ($orderby == 'favorites') {
+                    $novels = Novels::withCount('favorites')->where('author_novel', $author->author_novel)->where('deleted', 0)->orderBy('favorites_count', $order)->paginate(20);
+                }elseif ($orderby == 'judul') {
+                    $novels = Novels::where('deleted', 0)->where('author_novel', $author->author_novel)->orderBy('judul_novel', $order)->paginate(20);
+                }elseif($orderby == 'tanggal'){
+                    $novels = Novels::where('deleted', 0)->where('author_novel', $author->author_novel)->orderBy('created_at', $order)->paginate(20);
+                }
+
+                return view('filtered-novel')
+                ->with('totalvote', $totalvote)
+                ->with('jumlahbad', $jumlahBad)
+                ->with('jumlahneutral', $jumlahNeutral)
+                ->with('jumlahamazing', $jumlahAmazing)
+                ->with('persentasebad', $persentaseBad)
+                ->with('persentaseneutral', $persentaseNeutral)
+                ->with('persentaseamazing', $persentaseAmazing)
+                ->with('collections', $novels)
+                ->with('judulPage', $judulPage)
+                ->with('orderby', $orderby)
+                ->with('order', $order)
+                ->with('slugPage', $slugPage)
+                ->with('filtertipe', $filtertipe);
+            }else{
+                abort(404);
+            }
+        }else{
+            abort(404);
+        }
     }
 }

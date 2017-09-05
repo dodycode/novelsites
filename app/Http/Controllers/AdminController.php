@@ -64,7 +64,11 @@ class AdminController extends Controller
 
         $cekGenre = Genres::where('nama_genre', $request->input('nama_genre'))->where('deleted', 0)->count();
         if ($cekGenre < 1) {
-            $execute = Genres::create($request->all());
+            $genre = [
+                'nama_genre' => $request->input('nama_genre'),
+                'slug' => Str::slug($request->input('nama_genre'))
+            ];
+            $execute = Genres::create($genre);
 
             return redirect()->to(route('admin.genre'))->with('Success', 'Genre tersebut berhasil ditambahkan!');
         }else{
@@ -88,7 +92,11 @@ class AdminController extends Controller
 
         $cekGenre = Genres::where('nama_genre', $request->input('nama_genre'))->where('id', '<>', $id)->where('deleted', 0)->count();
         if ($cekGenre < 1) {
-            $execute = Genres::find($id)->update($request->all());
+            $genre = [
+                'nama_genre' => $request->input('nama_genre'),
+                'slug' => Str::slug($request->input('nama_genre'))
+            ];
+            $execute = Genres::find($id)->update($genre);
 
             return redirect()->to(route('admin.genre'))->with('Success', 'Genre tersebut berhasil diubah!');
         }else{
@@ -130,7 +138,12 @@ class AdminController extends Controller
 
         $cekType = TipeNovel::where('nama_tipe', $request->input('nama_tipe'))->where('deleted', 0)->count();
         if ($cekType < 1) {
-            $execute = TipeNovel::create($request->all());
+            $tipenovel = [
+                'nama_genre' => $request->input('nama_tipe'),
+                'slug' => Str::slug($request->input('nama_tipe'))
+            ];
+
+            $execute = TipeNovel::create($tipenovel);
             return redirect()->to(route('admin.tipenovel'))->with('Success', 'Tipe Novel tersebut berhasil ditambahkan!');
         }else{
             return redirect()->back()->with('Error', 'Tipe Novel tersebut telah terdaftar!');
@@ -153,7 +166,12 @@ class AdminController extends Controller
 
         $cekTipe = TipeNovel::where('nama_tipe', $request->input('nama_tipe'))->where('id', '<>', $id)->where('deleted', 0)->count();
         if ($cekTipe < 1) {
-            $execute = TipeNovel::find($id)->update($request->all());
+            $tipenovel = [
+                'nama_genre' => $request->input('nama_tipe'),
+                'slug' => Str::slug($request->input('nama_tipe'))
+            ];
+
+            $execute = TipeNovel::find($id)->update($tipenovel);
 
             return redirect()->to(route('admin.tipenovel'))->with('Success', 'Tipe Novel tersebut berhasil diubah!');
         }else{
@@ -335,7 +353,10 @@ class AdminController extends Controller
                 if (Tags::find($tag)) {
                     $tags[] = $tag;
                 }else{
-                    $t = ['nama_tag' => $tag];
+                    $t = [
+                        'nama_tag' => $tag,
+                        'slug' => Str::slug($tag)
+                    ];
                     $executeTag = Tags::updateOrCreate($t);
 
                     $tags[] = $executeTag->id;

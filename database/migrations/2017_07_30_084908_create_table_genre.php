@@ -15,6 +15,7 @@ class CreateTableGenre extends Migration
     {
         Schema::create('genres', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('slug');
             $table->string('nama_genre');
             $table->integer('deleted')->default(0);
             $table->timestamps();

@@ -88,13 +88,13 @@
 			<div class="panel-body">
 				<dl>
 					<dt>Tipe Novel</dt>
-					<dd><a href="#">{{ $novel->namatipe->nama_tipe }}</a></dd>
+					<dd><a href="{{ route('index.filter', ['filtertipe' => 'tipenovel', 'slug' => $novel->namatipe->slug]) }}">{{ $novel->namatipe->nama_tipe }}</a></dd>
 				</dl>
 				<dl>
 					<dt>Genre</dt>
 					<ul class="list-inline" style="margin-bottom: 0">
 						@foreach($novel->genres as $genre)
-						<li><a href="#">{{ $genre->nama_genre }}</a></li>
+						<li><a href="{{ route('index.filter', ['filtertipe' => 'genres', 'slug' => $genre->slug]) }}">{{ $genre->nama_genre }}</a></li>
 						@endforeach
 					</ul>
 				</dl>
@@ -102,19 +102,23 @@
 					<dt>Tags</dt>
 					<ul class="list-inline" style="margin-bottom: 0">
 						@foreach($novel->tags as $tag)
-						<li><a href="#">{{ $tag->nama_tag }}</a></li>
+						<li><a href="{{ route('index.filter', ['filtertipe' => 'tags', 'slug' => $tag->slug]) }}">{{ $tag->nama_tag }}</a></li>
 						@endforeach
 					</ul>
 				</dl>
 				<dl>
 					<dt>Author</dt>
-					<dd><a href="#">{{ $novel->author_novel }}</a></dd>
+					<dd><a href="{{ route('index.filter', ['filtertipe' => 'author', 'slug' => $novel->author_novel]) }}">{{ $novel->author_novel }}</a></dd>
 				</dl>
 				<dl>
 					<dt>Original Publisher</dt>
 					<dd>
 						@if($novel->raw_ft !== null)
-						<a href="{{ $novel->url_raw_ft }}">{{ $novel->raw_ft }}</a>
+							@if($novel->url_raw_ft !== null)
+							<a href="{{ $novel->url_raw_ft }}">{{ $novel->raw_ft }}</a>
+							@else
+							{{ $novel->raw_ft }}
+							@endif
 						@else
 						N/A
 						@endif
@@ -124,7 +128,11 @@
 					<dt>English Publisher</dt>
 					<dd>
 						@if($novel->raw_eng_ft !== null)
-						<a href="{{ $novel->url_raw_eng_ft }}">{{ $novel->raw_eng_ft }}</a>
+							@if($novel->url_raw_eng_ft !== null)
+							<a href="{{ $novel->url_raw_eng_ft }}">{{ $novel->raw_eng_ft }}</a>
+							@else
+							{{ $novel->raw_eng_ft }}
+							@endif
 						@else
 						N/A
 						@endif

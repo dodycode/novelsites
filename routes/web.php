@@ -31,6 +31,9 @@ Route::prefix('/')->group(function() {
 	Route::get('/novel', function() {
 		return redirect()->to(route('index.novel.list'));
 	});
+	Route::get('/novels', function() {
+		return redirect()->to(route('index.novel.list'));
+	});
 	Route::get('/fantranslation', function() {
 		return redirect()->to(route('index.novel.ft'));
 	});
@@ -63,6 +66,9 @@ Route::prefix('/')->group(function() {
 
 	// Sitemap
 	Route::get('/sitemap', 'SitemapController@index')->name('index.sitemap');
+
+	// filternovel
+	Route::get('/novels/{filtertipe}/{slug}/{orderby?}/{order?}', 'FrontEndController@filterNovel')->name('index.filter');
 });
 
  // Authentication Routes...

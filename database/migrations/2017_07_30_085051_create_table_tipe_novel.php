@@ -15,6 +15,7 @@ class CreateTableTipeNovel extends Migration
     {
         Schema::create('tipe_novel', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('slug');
             $table->string('nama_tipe');
             $table->integer('deleted')->default(0);
             $table->timestamps();

@@ -7,7 +7,7 @@ use App\Novels;
 
 class Tags extends Model
 {
-    protected $fillable = ['nama_tag', 'deleted'];
+    protected $fillable = ['slug', 'nama_tag', 'deleted'];
     protected $table = 'tags';
 
     public function novels(){

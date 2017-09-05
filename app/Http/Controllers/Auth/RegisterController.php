@@ -76,22 +76,28 @@ class RegisterController extends Controller
 
     public function register(Request $request){
         $this->validator($request->all())->validate();
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
-        ]);
+        $cekUser = User::where('name', $request->input('name'))->count();
+        if ($cekUser < 1) {
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+                'slug' => Str::slug($request->input('name'))
+            ]);
 
-        $aktivasi = [
-            'id_user' => $user->id,
-            'token' => str_random()
-        ];
+            $aktivasi = [
+                'id_user' => $user->id,
+                'token' => str_random()
+            ];
 
-        $execute = UserActivation::create($aktivasi);
+            $execute = UserActivation::create($aktivasi);
 
-        Mail::to($user->email)->send(new ActivationMail($execute));
+            Mail::to($user->email)->send(new ActivationMail($execute));
 
-        return redirect()->to('login')->with('Success',"Pendaftaran berhasil!. Kami telah mengirim kode verifikasi pada email kamu, silahkan di verifikasi dulu.");
+            return redirect()->to('login')->with('Success',"Pendaftaran berhasil!. Kami telah mengirim kode verifikasi pada email kamu, silahkan di verifikasi dulu.");
+        }else{
+            return redirect()->back()->with('Error', 'Username tersebut telah digunakan!');
+        }
     }
 
     public function userActivation($token)

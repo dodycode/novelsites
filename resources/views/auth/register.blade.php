@@ -18,6 +18,25 @@
 <meta property="twitter:image" content="https://sumeramalik.files.wordpress.com/2015/01/577376_zabor_art_zakat_siluet_doma_oblaka_devushka_anime__2800x2000_www-gdefon-ru.jpg" /> 
 @endsection
 @section('content')
+
+@if(Session::get('Success'))
+  <div class="row">
+      <div id="alert" class="alert alert-info col-xs-12 text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p>{{ Session::get('Success') }}</p>
+      </div>
+  </div>
+@endif
+
+@if(Session::get('Error'))
+  <div class="row">
+      <div id="alert" class="alert alert-danger col-xs-12 text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p>{{ Session::get('Error') }}</p>
+      </div>
+  </div>
+@endif
+
 <div class="row">
     <div class="col-xs-12">
         <h1>Register</h1>

@@ -8,7 +8,7 @@ use App\Novels;
 class Genres extends Model
 {
     protected $table = 'genres';
-    protected $fillable = ['nama_genre', 'deleted'];
+    protected $fillable = ['slug', 'nama_genre', 'deleted'];
 
     public function novels(){
     	return $this->belongsToMany('App\Novels', 'novel_genre', 'id_novel', 'id_genre')

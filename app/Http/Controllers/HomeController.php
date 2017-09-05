@@ -178,7 +178,10 @@ class HomeController extends Controller
                 if (Tags::find($tag)) {
                     $tags[] = $tag;
                 }else{
-                    $t = ['nama_tag' => $tag];
+                    $t = [
+                        'nama_tag' => $tag,
+                        'slug' => Str::slug($tag)
+                    ];
                     $executeTag = Tags::updateOrCreate($t);
 
                     $tags[] = $executeTag->id;
